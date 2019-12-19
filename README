@@ -1,0 +1,128 @@
+Names: MANU PARASHAR, Harshit Venket Subramanian (FULL COLLABORATION)
+ID #: 1547259, 1549859
+CMPUT 274 Fa18
+
+Project: Making Quadris (a game like Tetris)
+
+Included Files:
+    * quadris.py
+    * uagame.py => provided by the instructors
+    * Automation.mp3 from soundimage.org link => https://soundimage.org/looping-music/
+    * gameover.mp3 from freesound.org link => https://freesound.org/people/Robinhood76/sounds/171200/
+    * README
+
+    
+Description:
+ * There are 5 types of blocks and there are various orientations(rotational) of these 5 blocks. Only
+   one block is falling on the screen at a time. Automation.mp3 is played on the loop untill the game stops running. The blocks can move left and right and rotate(anticlockwise) provided they don't overlap any existing block and don't cross over left, right and bottom edge of the window in doing so. The screen is black originally. 
+
+ * A grid of 40 X 10 is printed of the left side of the window and the Score and the next block appear 
+   on the right side of the window. The blocks keep falling untill they hit either another block or the bottom edge. When a block is settled it can't go left or right or rotate. When this happens the block is now fixed and the block previously shown as next starts falling from the top of the grid, and a new next block is printed on the right hand side. The score is just the time since the start of the game is seconds.
+
+ * The block's colour and block shape are random is nature, although the blocks always start falling 
+   from the center of the grid at the top of the window. The score string is white on black and so is the next string and the actual score. When a block settles on the screen and it's top left corner touches the top of the window, the game is considered to be over the score stops increasing.
+
+ * When the game gets over Automation.mp3 stops playing and the gameover.mp3 is played once and The 
+   game over string is displayed on the center of the grid, It's red on blue. The player aims to complete rows to avoid reaching the top. When a row is completed all the squares in that row are deleted.
+
+  ## AFTER THIS POINT THE QUADRIS IS DIFFERENT FROM TETRIS ##
+
+ * The rows are deleted even if the block is still in motion but it still completes a line. If no 
+   square is deleted of a block then the block's "integrity" is intact which means it will fall down untill *any one* of the blocks's square either stacks upon another square or reaches the bottom of the window.
+
+ * If one or more squares of a block is deleted then the block's integrity is destroyed and all the 
+   remaining squares fall independently of each other untill all of them either stack or reach the bottom of the window.
+
+  
+Advantages over TETRIS:
+ * This allows the player to delete multiple lines at once creating something like a chain reaction
+ * Players have a good chance of recovery even if they are almost at the top (something we personally  
+   like the most).
+ * Moreover, the chain reaction gives it a cool candy crush like feeling.
+
+
+Functions:
+ * There is one main function and two Classes that contain multiple methods.
+
+ * main() : It contains main algorithm and returns nothing. It also creates a window.
+
+ * class Game: An object in this class represents a complete game.
+
+      * def __init__(self, window): It initialize a Game and self is the Game to initialize and window is the uagame window object.
+
+      * def create_board(self): It is a function to create the grid by drawing lines and self is the Game object. It returns nothing.
+
+      * def play(self): It is a function to play the game until the player presses the close box and self is the Game that should 
+        be continued or not. It returns nothing.
+
+      * def handle_event(self): It handles one user event by changing the game state appropriately and self is the Game whose
+        events will be handled. It returns nothing.
+        # Note: pygame.event.poll() gets only one event at a time (The first in the queue).
+
+      * def rotate_collision2(self,b): It is a function to make sure that rotating a block doesn't overlap any of the squares of 
+        another block and self is the Game object. b is the block object and returns either True(in case no overlaps due to rotation) 
+        or False(in case any overlap happens).
+
+      * def rotate_collision(self,b,k): It is a function to make sure that rotating a block doesn't cross over the left/right/down
+        edges of the grid and self is the game object, b is the block object, k is the edge to check for. It returns either 
+        True (in case no square crosses the edge) or False (in case any square crosses the edge). 
+
+      * def side_collision(self,b,k): It is a function that checks for side collision with the side edge of the grid and self is 
+        the object of Game class, b is the object of block class, k represents whether to check for left or right movement.
+        It return either true or false.
+
+      * def draw(self): It draws all game objects and self is the Game to draw. It returns nothing.
+
+      * def draw_next(self): It draws the "next:" string on the screen and self is the Game object. It returns nothing.
+
+      * def draw_score(self): It draws the "score:" string on the screen and the actual score below it and self is the Game object. 
+        It returns nothing.
+
+      * def draw_game_over(self): It draws the game over sign on the window when the game is over and self is the Game obeject.
+        It returns nothing.
+
+      * def update(self): It updates all game objects with state changes that are not due to user events and self is the 
+        Game to update. It returns nothing.
+
+      * def line_deletion(self,i): The function removes the coordinates of the squares of blocks of the deleted line from present_list
+        making the b.b1/b.b2/b.3/b.b4 False for the squares that are deleted. self is the Game object and i is the index of the row 
+        to be deleted. It returns nothing.
+
+      * def  stack_collision(self,b): It checks if the blocks are settled on top of another block and self is the Game object.
+        b is the object of the block class. It returns either True or False.
+
+      * def decide_continue(self): It determines if the game should continue and self is the Game to update.
+        It returns nothing.
+
+ * class block: It contains class attribute border colors for blocks
+
+      * def __init__(self,x,y,window,block_time,block_num): It initialzes the block made and self is the Game to 
+        initialize, window is the uagame window object, block_time is the time at which it was created, block_num
+        is the number of blocks that have been made before this one + 1 and x and y are the initial coordinates 
+        of square1. It returns nothing.
+
+      * def make_block(self): This makes different types of blocks depending on the randomly chosen values of step1,
+        step2 and step3 and self is the object of block class. It returns nothing.
+
+      * def draw_block(self): It draws the block and self is the object of block class. It returns nothing.
+
+      * def check_collision(self): It checks if the block has touched the lower edge of the window and self is the 
+        object of the block class. It returns either True or False.
+
+      * def move(self,k): It moves the blocks either left or right and self is the object of block class, k represents
+        the direction to move (either left or right). It returns nothing.
+
+      * def rotate(self): It rotates the block in the anti-clockwise direction and self is the object of block class.
+        It returns nothing.
+
+
+Running instructions:
+ * Run the file quadris.py using a Python IDE or from terminal (after changing to the appropriate 
+   directory) using " python3 quadris.py ".
+
+
+Playing instructions:
+ * To MOVE left or right use LEFT and RIGHT arrow buttons respectively.
+ * To ROTATE use SPACEBAR.
+ * To close or minimize window use the close and minimize buttons from taskbar respectively.
+
